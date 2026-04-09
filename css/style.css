@@ -1,0 +1,466 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #1a1a1a;
+  --city1: #00f0ff;
+  --city2: #ff2d55;
+  --city1-glow: rgba(0, 240, 255, 0.3);
+  --city2-glow: rgba(255, 45, 85, 0.3);
+  --text: #eee;
+  --text-dim: #555;
+  --text-muted: #666;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== Header ===== */
+header {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.title-accent {
+  color: var(--city2);
+  text-shadow: 0 0 30px var(--city2-glow);
+}
+
+.title-line {
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--city2), transparent);
+  margin: 12px auto 0;
+}
+
+/* ===== Input Area ===== */
+main {
+  width: 100%;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.input-area {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.input-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.city-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.city-input:focus {
+  border-color: var(--city2);
+}
+
+.city-input::placeholder {
+  color: var(--text-dim);
+}
+
+.vs-badge {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--city2);
+  padding-top: 10px;
+  flex-shrink: 0;
+}
+
+/* ===== Autocomplete Suggestions ===== */
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 10;
+  display: none;
+}
+
+.suggestions.active {
+  display: block;
+}
+
+.suggestion-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text);
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover,
+.suggestion-item.highlighted {
+  background: #2a2a2a;
+}
+
+.suggestion-item .dep {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+
+/* ===== Fight Button ===== */
+.fight-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: var(--city2);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s, box-shadow 0.2s;
+  text-transform: uppercase;
+}
+
+.fight-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.fight-btn:not(:disabled):hover {
+  box-shadow: 0 0 20px var(--city2-glow);
+}
+
+/* ===== Battle Area ===== */
+.battle-area {
+  margin-top: 40px;
+}
+
+.battle-area.hidden {
+  display: none;
+}
+
+.battle-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.city-name {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateX(0);
+}
+
+.city-name.animate-in-left {
+  animation: slam-left 0.4s ease-out forwards;
+}
+
+.city-name.animate-in-right {
+  animation: slam-right 0.4s ease-out forwards;
+}
+
+.city1-color {
+  color: var(--city1);
+  text-shadow: 0 0 15px var(--city1-glow);
+}
+
+.city2-color {
+  color: var(--city2);
+  text-shadow: 0 0 15px var(--city2-glow);
+}
+
+.battle-vs {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--city2);
+  text-shadow: 0 0 20px var(--city2-glow);
+  opacity: 0;
+}
+
+.battle-vs.visible {
+  opacity: 1;
+}
+
+/* ===== Stat Rows ===== */
+.stats-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stat-row {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.stat-row.animate-in {
+  animation: fade-up 0.3s ease-out forwards;
+}
+
+.stat-label {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.stat-values {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-value {
+  width: 90px;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.stat-value.left {
+  text-align: right;
+}
+
+.stat-value.right {
+  text-align: left;
+}
+
+.stat-value.winner {
+  font-weight: 700;
+}
+
+.stat-value.winner.city1 {
+  color: var(--city1);
+}
+
+.stat-value.winner.city2 {
+  color: var(--city2);
+}
+
+.stat-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--surface);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stat-bar-track.left {
+  direction: rtl;
+}
+
+.stat-bar {
+  height: 100%;
+  width: 0;
+  border-radius: 3px;
+  transition: width 0.6s ease-out;
+}
+
+.stat-bar.city1 {
+  background: linear-gradient(90deg, #00a8b5, var(--city1));
+}
+
+.stat-bar.city2 {
+  background: linear-gradient(90deg, var(--city2), #ff6b81);
+}
+
+.stat-bar.winner.city1 {
+  box-shadow: 0 0 8px var(--city1-glow);
+}
+
+.stat-bar.winner.city2 {
+  box-shadow: 0 0 8px var(--city2-glow);
+}
+
+/* ===== Winner Banner ===== */
+.winner-banner {
+  text-align: center;
+  margin-top: 32px;
+  padding: 16px;
+  border: 1px solid var(--city2);
+  border-radius: 8px;
+  background: rgba(255, 45, 85, 0.08);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.winner-banner.hidden {
+  display: none;
+}
+
+.winner-banner.animate-in {
+  animation: slide-up 0.4s ease-out forwards;
+}
+
+.winner-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 4px;
+}
+
+.winner-name {
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.winner-name.city1 {
+  color: var(--city1);
+  text-shadow: 0 0 15px var(--city1-glow);
+}
+
+.winner-name.city2 {
+  color: var(--city2);
+  text-shadow: 0 0 15px var(--city2-glow);
+}
+
+.winner-name.tie {
+  background: linear-gradient(90deg, var(--city1), var(--city2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.winner-banner.tie {
+  border-color: var(--city1);
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.05), rgba(255, 45, 85, 0.05));
+}
+
+/* ===== Reset Button ===== */
+.reset-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 24px;
+  margin-bottom: 40px;
+  background: transparent;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.reset-btn.hidden {
+  display: none;
+}
+
+.reset-btn:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+/* ===== Screen Flash ===== */
+.flash-overlay {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 100;
+  animation: flash 0.3s ease-out forwards;
+  pointer-events: none;
+}
+
+/* ===== Animations ===== */
+@keyframes slam-left {
+  from { opacity: 0; transform: translateX(-60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slam-right {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes flash {
+  0%   { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  .title {
+    font-size: 1.8rem;
+    letter-spacing: 4px;
+  }
+
+  .input-area {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .vs-badge {
+    text-align: center;
+    padding: 4px 0;
+  }
+
+  .city-name {
+    font-size: 1.4rem;
+  }
+
+  .stat-value {
+    width: 70px;
+    font-size: 0.8rem;
+  }
+}
