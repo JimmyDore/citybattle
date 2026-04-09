@@ -3,8 +3,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   const resetBtn = document.getElementById('reset-btn');
   const battleArea = document.getElementById('battle-area');
 
+  const loader = document.getElementById('loader');
+  const inputArea = document.getElementById('input-area');
+
   // Load city data
   await CityData.load();
+
+  // Hide loader, show inputs
+  loader.classList.add('hidden');
+  inputArea.classList.remove('hidden');
+  fightBtn.classList.remove('hidden');
 
   let city1 = null;
   let city2 = null;
