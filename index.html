@@ -12,12 +12,17 @@
     <div class="title-line"></div>
   </header>
 
-  <main>
-    <!-- Loader -->
-    <div id="loader" class="loader">Chargement des villes...</div>
+  <!-- Loader overlay -->
+  <div id="loader" class="loader-overlay">
+    <div class="loader-content">
+      <div class="spinner"></div>
+      <div class="loader-text">Chargement des villes...</div>
+    </div>
+  </div>
 
-    <!-- Input area (hidden until data loaded) -->
-    <section class="input-area hidden" id="input-area">
+  <main>
+    <!-- Input area -->
+    <section class="input-area" id="input-area">
       <div class="input-wrapper" id="input-wrapper-1">
         <input type="text" id="city-input-1" class="city-input" placeholder="Choisir une ville..." autocomplete="off">
         <div class="suggestions" id="suggestions-1"></div>
@@ -31,7 +36,7 @@
       </div>
     </section>
 
-    <button id="fight-btn" class="fight-btn hidden" disabled>FIGHT!</button>
+    <button id="fight-btn" class="fight-btn" disabled>FIGHT!</button>
 
     <!-- Battle area (hidden until fight) -->
     <section id="battle-area" class="battle-area hidden">

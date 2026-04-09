@@ -4,15 +4,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const battleArea = document.getElementById('battle-area');
 
   const loader = document.getElementById('loader');
-  const inputArea = document.getElementById('input-area');
 
   // Load city data
   await CityData.load();
 
-  // Hide loader, show inputs
-  loader.classList.add('hidden');
-  inputArea.classList.remove('hidden');
-  fightBtn.classList.remove('hidden');
+  // Fade out loader overlay
+  loader.classList.add('fade-out');
+  loader.addEventListener('transitionend', () => loader.remove());
 
   let city1 = null;
   let city2 = null;
