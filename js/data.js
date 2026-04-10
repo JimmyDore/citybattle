@@ -14,7 +14,7 @@ const CityData = (() => {
   }
 
   async function load() {
-    const resp = await fetch('data/cities.json');
+    const resp = await fetch('data/cities.json?v=4');
     cities = await resp.json();
 
     normalized = cities.map((city, idx) => {
