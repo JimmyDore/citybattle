@@ -1,10 +1,26 @@
 const Battle = (() => {
   // Stat definitions — add new stats here for future criteria
-  const STATS = [
-    { key: 'p', label: 'Population', format: (v) => v.toLocaleString('fr-FR') },
-    { key: 's', label: 'Superficie (km²)', format: (v) => v.toLocaleString('fr-FR') + ' km²' },
-    { key: 'ds', label: 'Densité (hab/km²)', format: (v) => v.toLocaleString('fr-FR') },
-    { key: 'a', label: 'Altitude moyenne (m)', format: (v) => v.toLocaleString('fr-FR') + ' m' },
+  const STAT_GROUPS = [
+    {
+      label: null,
+      stats: [
+        { key: 'p', label: '👥 Population', format: (v) => v.toLocaleString('fr-FR') },
+        { key: 's', label: '📐 Superficie', format: (v) => v.toLocaleString('fr-FR') + ' km²' },
+        { key: 'ds', label: '🏘️ Densité', format: (v) => v.toLocaleString('fr-FR') + ' hab/km²' },
+        { key: 'a', label: '⛰️ Altitude', format: (v) => v.toLocaleString('fr-FR') + ' m' },
+      ],
+    },
+    {
+      label: null,
+      stats: [
+        { key: 'bars', label: '🍺 Bars', format: (v) => v.toLocaleString('fr-FR') },
+        { key: 'resto', label: '🍽️ Restaurants', format: (v) => v.toLocaleString('fr-FR') },
+        { key: 'pisc', label: '🏊 Piscines', format: (v) => v.toLocaleString('fr-FR') },
+        { key: 'bars_r', label: '🍺 Bars / 10k hab', format: (v) => v.toLocaleString('fr-FR', { maximumFractionDigits: 1 }) },
+        { key: 'resto_r', label: '🍽️ Restos / 10k hab', format: (v) => v.toLocaleString('fr-FR', { maximumFractionDigits: 1 }) },
+        { key: 'pisc_r', label: '🏊 Piscines / 10k hab', format: (v) => v.toLocaleString('fr-FR', { maximumFractionDigits: 1 }) },
+      ],
+    },
   ];
 
   function run(city1, city2) {
@@ -54,49 +70,65 @@ const Battle = (() => {
     // Build stat rows
     let city1Wins = 0;
     let city2Wins = 0;
+    let statIndex = 0;
 
-    STATS.forEach((stat, i) => {
-      const v1 = city1[stat.key] || 0;
-      const v2 = city2[stat.key] || 0;
-      const maxVal = Math.max(v1, v2);
-      const pct1 = maxVal > 0 ? (v1 / maxVal) * 100 : 0;
-      const pct2 = maxVal > 0 ? (v2 / maxVal) * 100 : 0;
-      const winner = v1 > v2 ? 1 : v2 > v1 ? 2 : 0;
+    STAT_GROUPS.forEach((group, groupIdx) => {
+      // Add separator before second group
+      if (groupIdx > 0) {
+        const sep = document.createElement('div');
+        sep.className = 'stat-group-separator';
+        statsContainer.appendChild(sep);
 
-      if (winner === 1) city1Wins++;
-      if (winner === 2) city2Wins++;
-
-      const row = document.createElement('div');
-      row.className = 'stat-row';
-      row.innerHTML = `
-        <div class="stat-label">${stat.label}</div>
-        <div class="stat-values">
-          <div class="stat-value left ${winner === 1 ? 'winner city1' : ''}">${stat.format(v1)}</div>
-          <div class="stat-bar-track left">
-            <div class="stat-bar city1 ${winner === 1 ? 'winner' : ''}" data-width="${pct1}"></div>
-          </div>
-          <div class="stat-bar-track">
-            <div class="stat-bar city2 ${winner === 2 ? 'winner' : ''}" data-width="${pct2}"></div>
-          </div>
-          <div class="stat-value right ${winner === 2 ? 'winner city2' : ''}">${stat.format(v2)}</div>
-        </div>
-      `;
-      statsContainer.appendChild(row);
-
-      // Staggered animation
-      setTimeout(() => {
-        row.classList.add('animate-in');
-        // Animate bars after row appears
         setTimeout(() => {
-          row.querySelectorAll('.stat-bar').forEach((bar) => {
-            bar.style.width = bar.dataset.width + '%';
-          });
-        }, 100);
-      }, 500 + i * 200);
+          sep.classList.add('animate-in');
+        }, 500 + statIndex * 200);
+      }
+
+      group.stats.forEach((stat) => {
+        const v1 = city1[stat.key] || 0;
+        const v2 = city2[stat.key] || 0;
+        const maxVal = Math.max(v1, v2);
+        const pct1 = maxVal > 0 ? (v1 / maxVal) * 100 : 0;
+        const pct2 = maxVal > 0 ? (v2 / maxVal) * 100 : 0;
+        const winner = v1 > v2 ? 1 : v2 > v1 ? 2 : 0;
+
+        if (winner === 1) city1Wins++;
+        if (winner === 2) city2Wins++;
+
+        const row = document.createElement('div');
+        row.className = 'stat-row';
+        row.innerHTML = `
+          <div class="stat-label">${stat.label}</div>
+          <div class="stat-values">
+            <div class="stat-value left ${winner === 1 ? 'winner city1' : ''}">${stat.format(v1)}</div>
+            <div class="stat-bar-track left">
+              <div class="stat-bar city1 ${winner === 1 ? 'winner' : ''}" data-width="${pct1}"></div>
+            </div>
+            <div class="stat-bar-track">
+              <div class="stat-bar city2 ${winner === 2 ? 'winner' : ''}" data-width="${pct2}"></div>
+            </div>
+            <div class="stat-value right ${winner === 2 ? 'winner city2' : ''}">${stat.format(v2)}</div>
+          </div>
+        `;
+        statsContainer.appendChild(row);
+
+        const currentIdx = statIndex;
+        setTimeout(() => {
+          row.classList.add('animate-in');
+          setTimeout(() => {
+            row.querySelectorAll('.stat-bar').forEach((bar) => {
+              bar.style.width = bar.dataset.width + '%';
+            });
+          }, 100);
+        }, 500 + currentIdx * 200);
+
+        statIndex++;
+      });
     });
 
     // Winner banner
-    const totalDelay = 500 + STATS.length * 200 + 400;
+    const totalStats = STAT_GROUPS.reduce((sum, g) => sum + g.stats.length, 0);
+    const totalDelay = 500 + totalStats * 200 + 400;
     setTimeout(() => {
       winnerBanner.classList.remove('hidden');
 
