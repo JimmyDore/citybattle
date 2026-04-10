@@ -398,6 +398,19 @@ main {
   box-shadow: 0 0 8px var(--city2-glow);
 }
 
+/* ===== Stat Group Separator ===== */
+.stat-group-separator {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--text-dim), transparent);
+  margin: 16px 0;
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+}
+
+.stat-group-separator.animate-in {
+  opacity: 0.3;
+}
+
 /* ===== Winner Banner ===== */
 .winner-banner {
   text-align: center;
