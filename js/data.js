@@ -18,8 +18,8 @@ const CityData = (() => {
     cities = await resp.json();
 
     normalized = cities.map((city, idx) => {
-      const lower = removeAccents(city.n).toLowerCase();
-      const stripped = removeAccents(stripPrefix(city.n)).toLowerCase();
+      const lower = removeAccents(city.n).toLowerCase().replace(/-/g, ' ');
+      const stripped = removeAccents(stripPrefix(city.n)).toLowerCase().replace(/-/g, ' ');
       return { norm: lower, normNoPrefix: stripped, idx };
     });
   }
@@ -27,7 +27,7 @@ const CityData = (() => {
   function search(query, max = 8) {
     if (!query || query.length < 1) return [];
 
-    const q = removeAccents(query).toLowerCase();
+    const q = removeAccents(query).toLowerCase().replace(/-/g, ' ');
     const results = [];
 
     for (let i = 0; i < normalized.length && results.length < max; i++) {
