@@ -2,10 +2,9 @@ const Battle = (() => {
   // Stat definitions — add new stats here for future criteria
   const STATS = [
     { key: 'p', label: 'Population', format: (v) => v.toLocaleString('fr-FR') },
-    // Future stats:
-    // { key: 's', label: 'Superficie (km²)', format: (v) => v.toLocaleString('fr-FR') },
-    // { key: 'ds', label: 'Densité (hab/km²)', format: (v) => v.toLocaleString('fr-FR') },
-    // { key: 'a', label: 'Altitude moyenne (m)', format: (v) => v.toLocaleString('fr-FR') + ' m' },
+    { key: 's', label: 'Superficie (km²)', format: (v) => v.toLocaleString('fr-FR') + ' km²' },
+    { key: 'ds', label: 'Densité (hab/km²)', format: (v) => v.toLocaleString('fr-FR') },
+    { key: 'a', label: 'Altitude moyenne (m)', format: (v) => v.toLocaleString('fr-FR') + ' m' },
   ];
 
   function run(city1, city2) {
@@ -35,6 +34,12 @@ const Battle = (() => {
 
     name1El.textContent = city1.n;
     name2El.textContent = city2.n;
+
+    // Show department under city names
+    const dept1El = document.getElementById('city1-dept');
+    const dept2El = document.getElementById('city2-dept');
+    dept1El.textContent = city1.d;
+    dept2El.textContent = city2.d;
     name1El.className = 'city-name city1-color';
     name2El.className = 'city-name city2-color';
     vsEl.classList.remove('visible');

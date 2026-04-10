@@ -104,5 +104,10 @@ function Autocomplete(inputId, suggestionsId, onSelect) {
     return selectedCity;
   }
 
-  return { reset, getSelected };
+  function setCity(city) {
+    selectedCity = city;
+    input.value = `${city.n} (${city.d})`;
+  }
+
+  return { reset, getSelected, setCity };
 }

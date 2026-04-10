@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>City Battle</title>
-  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
   <header>
@@ -36,14 +36,23 @@
       </div>
     </section>
 
-    <button id="fight-btn" class="fight-btn" disabled>FIGHT!</button>
+    <div class="btn-row">
+      <button id="random-btn" class="random-btn" title="Combat aléatoire">&#x1F3B2;</button>
+      <button id="fight-btn" class="fight-btn" disabled>FIGHT!</button>
+    </div>
 
     <!-- Battle area (hidden until fight) -->
     <section id="battle-area" class="battle-area hidden">
       <div class="battle-header">
-        <div id="city1-name" class="city-name city1-color"></div>
+        <div class="city-header-block">
+          <div id="city1-name" class="city-name city1-color"></div>
+          <div id="city1-dept" class="city-dept city1-color"></div>
+        </div>
         <div class="battle-vs">VS</div>
-        <div id="city2-name" class="city-name city2-color"></div>
+        <div class="city-header-block">
+          <div id="city2-name" class="city-name city2-color"></div>
+          <div id="city2-dept" class="city-dept city2-color"></div>
+        </div>
       </div>
 
       <div id="stats-container" class="stats-container">
@@ -59,9 +68,9 @@
     <button id="reset-btn" class="reset-btn hidden">NOUVEAU COMBAT</button>
   </main>
 
-  <script src="js/data.js?v=2"></script>
-  <script src="js/autocomplete.js?v=2"></script>
-  <script src="js/battle.js?v=2"></script>
-  <script src="js/app.js?v=2"></script>
+  <script src="js/data.js?v=3"></script>
+  <script src="js/autocomplete.js?v=3"></script>
+  <script src="js/battle.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
 </body>
 </html>

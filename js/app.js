@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const fightBtn = document.getElementById('fight-btn');
+  const randomBtn = document.getElementById('random-btn');
   const resetBtn = document.getElementById('reset-btn');
   const battleArea = document.getElementById('battle-area');
 
@@ -28,6 +29,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   const ac2 = Autocomplete('city-input-2', 'suggestions-2', (city) => {
     city2 = city;
     updateFightButton();
+  });
+
+  // Random matchup
+  randomBtn.addEventListener('click', () => {
+    const all = CityData.getAll();
+    const i1 = Math.floor(Math.random() * all.length);
+    let i2 = Math.floor(Math.random() * (all.length - 1));
+    if (i2 >= i1) i2++;
+    city1 = all[i1];
+    city2 = all[i2];
+    ac1.setCity(city1);
+    ac2.setCity(city2);
+    updateFightButton();
+    fightBtn.click();
   });
 
   // Fight!

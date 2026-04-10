@@ -186,10 +186,32 @@ main {
   font-size: 0.8rem;
 }
 
+/* ===== Button Row ===== */
+.btn-row {
+  display: flex;
+  gap: 10px;
+}
+
+.random-btn {
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid #333;
+  border-radius: 6px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+
+.random-btn:hover {
+  border-color: var(--city1);
+  box-shadow: 0 0 15px var(--city1-glow);
+}
+
 /* ===== Fight Button ===== */
 .fight-btn {
   display: block;
-  width: 100%;
+  flex: 1;
   padding: 14px;
   background: var(--city2);
   color: white;
@@ -244,6 +266,20 @@ main {
 
 .city-name.animate-in-right {
   animation: slam-right 0.4s ease-out forwards;
+}
+
+/* ===== City Header Block ===== */
+.city-header-block {
+  text-align: center;
+}
+
+.city-dept {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-top: 2px;
 }
 
 .city1-color {
