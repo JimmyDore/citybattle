@@ -3,8 +3,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const randomBtn = document.getElementById('random-btn');
   const resetBtn = document.getElementById('reset-btn');
   const battleArea = document.getElementById('battle-area');
-
   const loader = document.getElementById('loader');
+
+  // Mode sections
+  const combatSection = document.getElementById('combat-section');
+  const classementSection = document.getElementById('classement-section');
+  const modeBtns = document.querySelectorAll('.mode-btn');
 
   // Load city data
   await CityData.load();
@@ -13,6 +17,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   loader.classList.add('fade-out');
   loader.addEventListener('transitionend', () => loader.remove());
 
+  // ===== MODE TOGGLE =====
+  modeBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.mode;
+      modeBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (mode === 'combat') {
+        combatSection.classList.remove('hidden');
+        classementSection.classList.add('hidden');
+      } else {
+        combatSection.classList.add('hidden');
+        classementSection.classList.remove('hidden');
+      }
+    });
+  });
+
+  // ===== COMBAT MODE =====
   let city1 = null;
   let city2 = null;
 
@@ -20,7 +42,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     fightBtn.disabled = !(city1 && city2);
   }
 
-  // Set up autocompletes
   const ac1 = Autocomplete('city-input-1', 'suggestions-1', (city) => {
     city1 = city;
     updateFightButton();
@@ -31,7 +52,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateFightButton();
   });
 
-  // Random matchup
   randomBtn.addEventListener('click', () => {
     const all = CityData.getAll();
     const i1 = Math.floor(Math.random() * all.length);
@@ -45,14 +65,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     fightBtn.click();
   });
 
-  // Fight!
   fightBtn.addEventListener('click', () => {
     if (!city1 || !city2) return;
     fightBtn.disabled = true;
     Battle.run(city1, city2);
   });
 
-  // Reset
   resetBtn.addEventListener('click', () => {
     city1 = null;
     city2 = null;
@@ -62,4 +80,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     resetBtn.classList.add('hidden');
     updateFightButton();
   });
+
+  // ===== CLASSEMENT MODE =====
+
+  // Département autocomplete
+  Autocomplete('lb-dept-input', 'lb-dept-suggestions', (dept) => {
+    Leaderboard.setDepartement(dept);
+  }, {
+    search: (q) => CityData.searchDepartements(q),
+    formatItem: (dept) => dept,
+    formatSelected: (dept) => dept,
+  });
+
+  // Criteria picker
+  const criteriaSelect = document.getElementById('lb-criteria');
+  criteriaSelect.addEventListener('change', () => {
+    Leaderboard.setCriterion(criteriaSelect.value);
+  });
+
+  // Top/Flop toggle
+  const toggleBtns = document.querySelectorAll('.lb-toggle-btn');
+  toggleBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      toggleBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      Leaderboard.setFlop(btn.dataset.dir === 'flop');
+    });
+  });
+
+  // Initialize leaderboard
+  Leaderboard.init();
 });
