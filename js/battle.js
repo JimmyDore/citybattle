@@ -1,28 +1,4 @@
 const Battle = (() => {
-  // Stat definitions — add new stats here for future criteria
-  const STAT_GROUPS = [
-    {
-      label: null,
-      stats: [
-        { key: 'p', label: '👥 Population', format: (v) => v.toLocaleString('fr-FR') },
-        { key: 's', label: '📐 Superficie', format: (v) => v.toLocaleString('fr-FR') + ' km²' },
-        { key: 'ds', label: '🏘️ Densité', format: (v) => v.toLocaleString('fr-FR') + ' hab/km²' },
-        { key: 'a', label: '⛰️ Altitude', format: (v) => v.toLocaleString('fr-FR') + ' m' },
-      ],
-    },
-    {
-      label: null,
-      stats: [
-        { key: 'bars', label: '🍺 Bars', format: (v) => v.toLocaleString('fr-FR') },
-        { key: 'resto', label: '🍽️ Restaurants', format: (v) => v.toLocaleString('fr-FR') },
-        { key: 'pisc', label: '🏊 Piscines', format: (v) => v.toLocaleString('fr-FR') },
-        { key: 'bars_r', label: '🍺 Bars / 10k hab', format: (v) => v.toLocaleString('fr-FR', { maximumFractionDigits: 1 }) },
-        { key: 'resto_r', label: '🍽️ Restos / 10k hab', format: (v) => v.toLocaleString('fr-FR', { maximumFractionDigits: 1 }) },
-        { key: 'pisc_r', label: '🏊 Piscines / 10k hab', format: (v) => v.toLocaleString('fr-FR', { maximumFractionDigits: 1 }) },
-      ],
-    },
-  ];
-
   function run(city1, city2) {
     const battleArea = document.getElementById('battle-area');
     const statsContainer = document.getElementById('stats-container');
@@ -72,7 +48,7 @@ const Battle = (() => {
     let city2Wins = 0;
     let statIndex = 0;
 
-    STAT_GROUPS.forEach((group, groupIdx) => {
+    Stats.GROUPS.forEach((group, groupIdx) => {
       // Add separator before second group
       if (groupIdx > 0) {
         const sep = document.createElement('div');
@@ -127,7 +103,7 @@ const Battle = (() => {
     });
 
     // Winner banner
-    const totalStats = STAT_GROUPS.reduce((sum, g) => sum + g.stats.length, 0);
+    const totalStats = Stats.GROUPS.reduce((sum, g) => sum + g.stats.length, 0);
     const totalDelay = 500 + totalStats * 200 + 400;
     setTimeout(() => {
       winnerBanner.classList.remove('hidden');
