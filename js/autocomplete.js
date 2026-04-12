@@ -1,8 +1,17 @@
-function Autocomplete(inputId, suggestionsId, onSelect) {
+function Autocomplete(inputId, suggestionsId, onSelect, options) {
+  const opts = options || {};
+  const searchFn = opts.search || function (q) { return CityData.search(q); };
+  const formatItem = opts.formatItem || function (item) {
+    return item.n + ' <span class="dep">(' + item.d + ')</span>';
+  };
+  const formatSelected = opts.formatSelected || function (item) {
+    return item.n + ' (' + item.d + ')';
+  };
+
   const input = document.getElementById(inputId);
   const suggestionsEl = document.getElementById(suggestionsId);
   let debounceTimer = null;
-  let selectedCity = null;
+  let selectedItem = null;
   let highlightedIdx = -1;
   let currentResults = [];
 
@@ -17,34 +26,34 @@ function Autocomplete(inputId, suggestionsId, onSelect) {
     }
 
     suggestionsEl.innerHTML = results
-      .map((city, i) =>
-        `<div class="suggestion-item" data-index="${i}">
-          ${city.n} <span class="dep">(${city.d})</span>
-        </div>`
-      )
+      .map(function (item, i) {
+        return '<div class="suggestion-item" data-index="' + i + '">' +
+          formatItem(item) +
+          '</div>';
+      })
       .join('');
 
     suggestionsEl.classList.add('active');
 
-    suggestionsEl.querySelectorAll('.suggestion-item').forEach((el) => {
-      el.addEventListener('mousedown', (e) => {
+    suggestionsEl.querySelectorAll('.suggestion-item').forEach(function (el) {
+      el.addEventListener('mousedown', function (e) {
         e.preventDefault();
         select(results[parseInt(el.dataset.index)]);
       });
     });
   }
 
-  function select(city) {
-    selectedCity = city;
-    input.value = `${city.n} (${city.d})`;
+  function select(item) {
+    selectedItem = item;
+    input.value = formatSelected(item);
     suggestionsEl.classList.remove('active');
     suggestionsEl.innerHTML = '';
-    onSelect(city);
+    onSelect(item);
   }
 
   function updateHighlight() {
-    const items = suggestionsEl.querySelectorAll('.suggestion-item');
-    items.forEach((el, i) => {
+    var items = suggestionsEl.querySelectorAll('.suggestion-item');
+    items.forEach(function (el, i) {
       el.classList.toggle('highlighted', i === highlightedIdx);
     });
     if (highlightedIdx >= 0 && items[highlightedIdx]) {
@@ -52,18 +61,18 @@ function Autocomplete(inputId, suggestionsId, onSelect) {
     }
   }
 
-  input.addEventListener('input', () => {
-    selectedCity = null;
+  input.addEventListener('input', function () {
+    selectedItem = null;
     onSelect(null);
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      const query = input.value.trim();
-      const results = CityData.search(query);
+    debounceTimer = setTimeout(function () {
+      var query = input.value.trim();
+      var results = searchFn(query);
       render(results);
     }, 150);
   });
 
-  input.addEventListener('keydown', (e) => {
+  input.addEventListener('keydown', function (e) {
     if (!suggestionsEl.classList.contains('active')) return;
 
     if (e.key === 'ArrowDown') {
@@ -84,15 +93,14 @@ function Autocomplete(inputId, suggestionsId, onSelect) {
     }
   });
 
-  input.addEventListener('blur', () => {
-    // Small delay to allow click on suggestion
-    setTimeout(() => {
+  input.addEventListener('blur', function () {
+    setTimeout(function () {
       suggestionsEl.classList.remove('active');
     }, 200);
   });
 
   function reset() {
-    selectedCity = null;
+    selectedItem = null;
     input.value = '';
     suggestionsEl.classList.remove('active');
     suggestionsEl.innerHTML = '';
@@ -101,12 +109,12 @@ function Autocomplete(inputId, suggestionsId, onSelect) {
   }
 
   function getSelected() {
-    return selectedCity;
+    return selectedItem;
   }
 
-  function setCity(city) {
-    selectedCity = city;
-    input.value = `${city.n} (${city.d})`;
+  function setCity(item) {
+    selectedItem = item;
+    input.value = formatSelected(item);
   }
 
   return { reset, getSelected, setCity };
