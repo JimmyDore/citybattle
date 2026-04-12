@@ -7,10 +7,18 @@ const Leaderboard = (() => {
   let displayedCount = 0;
   let observer = null;
 
+  let initialized = false;
+
   function init() {
     buildCriteriaOptions();
     setupObserver();
-    update();
+  }
+
+  function show() {
+    if (!initialized) {
+      initialized = true;
+      update();
+    }
   }
 
   function buildCriteriaOptions() {
@@ -68,13 +76,16 @@ const Leaderboard = (() => {
     list.innerHTML = '';
 
     var sentinel = document.getElementById('lb-sentinel');
-    sentinel.style.display = '';
+    sentinel.classList.remove('hidden');
 
     renderMore();
 
-    // Scroll leaderboard back to top
+    // Scroll leaderboard back to top (only when section is visible)
     list.parentElement.scrollTop = 0;
-    window.scrollTo({ top: document.getElementById('classement-section').offsetTop - 80, behavior: 'smooth' });
+    var section = document.getElementById('classement-section');
+    if (!section.classList.contains('hidden')) {
+      window.scrollTo({ top: section.offsetTop - 80, behavior: 'smooth' });
+    }
   }
 
   function renderMore() {
@@ -106,9 +117,9 @@ const Leaderboard = (() => {
 
     var sentinel = document.getElementById('lb-sentinel');
     if (displayedCount >= sortedData.length) {
-      sentinel.style.display = 'none';
+      sentinel.classList.add('hidden');
     }
   }
 
-  return { init, setCriterion, setDepartement, setFlop };
+  return { init, show, setCriterion, setDepartement, setFlop };
 })();

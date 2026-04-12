@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       } else {
         combatSection.classList.add('hidden');
         classementSection.classList.remove('hidden');
+        Leaderboard.show();
       }
     });
   });
