@@ -12,6 +12,12 @@
     <div class="title-line"></div>
   </header>
 
+  <!-- Mode toggle -->
+  <div class="mode-toggle" id="mode-toggle">
+    <button class="mode-btn active" data-mode="combat">⚔️ COMBAT</button>
+    <button class="mode-btn" data-mode="classement">🏆 CLASSEMENT</button>
+  </div>
+
   <!-- Loader overlay -->
   <div id="loader" class="loader-overlay">
     <div class="loader-content">
@@ -21,57 +27,95 @@
   </div>
 
   <main>
-    <!-- Input area -->
-    <section class="input-area" id="input-area">
-      <div class="input-wrapper" id="input-wrapper-1">
-        <input type="text" id="city-input-1" class="city-input" placeholder="Choisir une ville..." autocomplete="off">
-        <div class="suggestions" id="suggestions-1"></div>
+    <!-- ===== COMBAT MODE ===== -->
+    <section id="combat-section">
+      <section class="input-area" id="input-area">
+        <div class="input-wrapper" id="input-wrapper-1">
+          <input type="text" id="city-input-1" class="city-input" placeholder="Choisir une ville..." autocomplete="off">
+          <div class="suggestions" id="suggestions-1"></div>
+        </div>
+
+        <div class="vs-badge">VS</div>
+
+        <div class="input-wrapper" id="input-wrapper-2">
+          <input type="text" id="city-input-2" class="city-input" placeholder="Choisir une ville..." autocomplete="off">
+          <div class="suggestions" id="suggestions-2"></div>
+        </div>
+      </section>
+
+      <div class="btn-row">
+        <button id="random-btn" class="random-btn" title="Combat aléatoire">&#x1F3B2;</button>
+        <button id="fight-btn" class="fight-btn" disabled>FIGHT!</button>
       </div>
 
-      <div class="vs-badge">VS</div>
+      <section id="battle-area" class="battle-area hidden">
+        <div class="battle-header">
+          <div class="city-header-block">
+            <div id="city1-name" class="city-name city1-color"></div>
+            <div id="city1-dept" class="city-dept city1-color"></div>
+          </div>
+          <div class="battle-vs">VS</div>
+          <div class="city-header-block">
+            <div id="city2-name" class="city-name city2-color"></div>
+            <div id="city2-dept" class="city-dept city2-color"></div>
+          </div>
+        </div>
 
-      <div class="input-wrapper" id="input-wrapper-2">
-        <input type="text" id="city-input-2" class="city-input" placeholder="Choisir une ville..." autocomplete="off">
-        <div class="suggestions" id="suggestions-2"></div>
-      </div>
+        <div id="stats-container" class="stats-container"></div>
+
+        <div id="winner-banner" class="winner-banner hidden">
+          <div class="winner-label">VAINQUEUR</div>
+          <div id="winner-name" class="winner-name"></div>
+        </div>
+      </section>
+
+      <button id="reset-btn" class="reset-btn hidden">NOUVEAU COMBAT</button>
     </section>
 
-    <div class="btn-row">
-      <button id="random-btn" class="random-btn" title="Combat aléatoire">&#x1F3B2;</button>
-      <button id="fight-btn" class="fight-btn" disabled>FIGHT!</button>
-    </div>
-
-    <!-- Battle area (hidden until fight) -->
-    <section id="battle-area" class="battle-area hidden">
-      <div class="battle-header">
-        <div class="city-header-block">
-          <div id="city1-name" class="city-name city1-color"></div>
-          <div id="city1-dept" class="city-dept city1-color"></div>
+    <!-- ===== CLASSEMENT MODE ===== -->
+    <section id="classement-section" class="hidden">
+      <!-- Controls -->
+      <div class="lb-controls">
+        <div class="lb-control">
+          <div class="lb-control-label">Critère</div>
+          <select id="lb-criteria" class="lb-select"></select>
         </div>
-        <div class="battle-vs">VS</div>
-        <div class="city-header-block">
-          <div id="city2-name" class="city-name city2-color"></div>
-          <div id="city2-dept" class="city-dept city2-color"></div>
+
+        <div class="lb-control">
+          <div class="lb-control-label">Département</div>
+          <div class="input-wrapper">
+            <input type="text" id="lb-dept-input" class="city-input" placeholder="Toute la France..." autocomplete="off">
+            <div class="suggestions" id="lb-dept-suggestions"></div>
+          </div>
+        </div>
+
+        <div class="lb-control lb-control-toggle">
+          <div class="lb-toggle" id="lb-toggle">
+            <button class="lb-toggle-btn active" data-dir="top">🔝 TOP</button>
+            <button class="lb-toggle-btn" data-dir="flop">💀 FLOP</button>
+          </div>
         </div>
       </div>
 
-      <div id="stats-container" class="stats-container">
-        <!-- Stat rows injected by battle.js -->
-      </div>
-
-      <div id="winner-banner" class="winner-banner hidden">
-        <div class="winner-label">VAINQUEUR</div>
-        <div id="winner-name" class="winner-name"></div>
+      <!-- Leaderboard table -->
+      <div class="lb-table">
+        <div class="lb-header">
+          <div class="lb-rank">#</div>
+          <div class="lb-city">Ville</div>
+          <div class="lb-dept">Département</div>
+          <div class="lb-value">Valeur</div>
+        </div>
+        <div id="leaderboard-list"></div>
+        <div id="lb-sentinel" class="lb-sentinel">▼ Scroll pour voir plus ▼</div>
       </div>
     </section>
-
-    <button id="reset-btn" class="reset-btn hidden">NOUVEAU COMBAT</button>
   </main>
 
   <script src="js/data.js?v=5"></script>
   <script src="js/stats.js?v=5"></script>
   <script src="js/autocomplete.js?v=5"></script>
   <script src="js/battle.js?v=5"></script>
+  <script src="js/leaderboard.js?v=5"></script>
   <script src="js/app.js?v=5"></script>
 </body>
 </html>
