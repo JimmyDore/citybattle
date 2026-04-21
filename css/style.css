@@ -251,23 +251,26 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 16px;
   margin-bottom: 32px;
   position: sticky;
   top: 0;
   z-index: 50;
   background: var(--bg);
-  padding: 16px 0;
+  padding: 16px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .city-name {
-  font-size: 2rem;
+  font-size: clamp(1.1rem, 6vw, 2rem);
   font-weight: 900;
   letter-spacing: 2px;
   text-transform: uppercase;
   opacity: 0;
   transform: translateX(0);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .city-name.animate-in-left {
@@ -281,6 +284,8 @@ main {
 /* ===== City Header Block ===== */
 .city-header-block {
   text-align: center;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .city-dept {
@@ -805,10 +810,6 @@ main {
   .vs-badge {
     text-align: center;
     padding: 4px 0;
-  }
-
-  .city-name {
-    font-size: 1.4rem;
   }
 
   .stat-value {
