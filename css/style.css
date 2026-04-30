@@ -849,3 +849,31 @@ main {
     font-size: 0.8rem;
   }
 }
+
+/* ===== Footer ===== */
+.site-footer {
+  margin-top: auto;
+  padding: 2rem 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.footer-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-links a {
+  color: var(--text-dim);
+  transition: color 0.2s, transform 0.2s;
+  display: flex;
+}
+
+.footer-links a:hover {
+  color: var(--city1);
+  transform: scale(1.15);
+}
